@@ -13,6 +13,8 @@ jobs:
         run: |
           reviews=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews")
+          
+          echo "Reviews JSON: $reviews"
 
           approved_reviews=$(echo "$reviews" | jq '[.[] | select(.state == "APPROVED")] | length')
 
