@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Check if there are 2 approved reviews
         run: |
+          echo "https://api.github.com/repos/GeraldAdyen/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews"
           reviews=$(curl -L \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
