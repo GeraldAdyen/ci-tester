@@ -1,0 +1,30 @@
+name: Pull Request workflow
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if there are 2 approved reviews
+        run: |
+          reviews=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews")
+
+          approved_reviews=$(echo "$reviews" | jq '.[] | select(.state == "APPROVED")' | wc -l)
+
+          if [[ $approved_reviews -ge 2 ]]; then
+            echo "There are 2 or more approved reviews. Run the desired script here."
+            # Add your script or command to run here
+          else
+            echo "Not enough approved reviews. Skipping the script."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
