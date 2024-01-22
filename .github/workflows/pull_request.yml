@@ -2,14 +2,11 @@ name: Pull Request workflow
 
 on:
   pull_request_review:
-    types: [submitted]
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+    types:
+      - submitted
 
 jobs:
-  check:
+  build:
     runs-on: ubuntu-latest
 
     steps:
