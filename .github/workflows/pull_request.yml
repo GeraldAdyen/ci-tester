@@ -23,6 +23,7 @@ jobs:
           echo "Reviews JSON: $reviews"
 
           approved_reviews=$(echo "$reviews" | jq '[.[] | select(.state == "APPROVED")] | length')
+          echo "Number of approved reviews: $approved_reviews"
 
           if [[ $approved_reviews -ge 2 ]]; then
             echo "There are 2 or more approved reviews. Run the desired script here."
